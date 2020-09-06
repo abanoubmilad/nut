@@ -3,7 +3,7 @@ package org.abanoubmilad.nut.models
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class VolumesResponse : NetworkResponseStatus() {
+class VolumesResponse {
     @SerializedName("kind")
     @Expose
     val kind: String? = null

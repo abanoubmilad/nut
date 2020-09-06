@@ -42,6 +42,120 @@ Add to app level `build.gradle`
     }
 ```
 
+## How to use
+
+```kotlin
+
+   /*
+    *
+    *   make your view model extends the BaseViewModel
+    *
+    */
+
+class BookSearchViewModel : BaseViewModel {
+
+   /*
+    *
+    *   use makeNetworkRequest to consume a single provided by the retrofit interface
+    *   network call are handled by background threads
+    *   callbacks run on UI thread
+    *
+    *
+    */
+
+    fun searchVolumes(keyword: String?, author: String?) {
+        makeNetworkRequest(bookRepository.searchVolumes(keyword, author), {
+            volumesResponseLiveData.postValue(it)
+
+        }, {
+            AppLogger.e("NetworkError", it.code.toString())
+            AppLogger.e(
+                "NetworkError",
+                it.parseAs<ErrorResponse>()?.error?.message.orEmpty()
+            )
+        })
+    }
+
+   /*
+    *
+    *   use makeNetworkRequest providing three singles to consume each single provided by the retrofit interface
+    *   in parallel
+    *   network call are handled by background threads
+    *   callbacks run on UI thread
+    *
+    *
+    */
+
+    fun searchVolumesThreeParallel(
+        keyword: String?,
+        author: String?
+    ) {
+
+        makeNetworkRequestsParallel(
+            bookRepository.searchVolumes(keyword, author), {
+                volumesResponseLiveData.postValue(it)
+
+            }, bookRepository.searchVolumes(keyword, author), {
+                volumesResponseLiveData.postValue(it)
+
+            },
+            bookRepository.searchVolumes(keyword, author), {
+                volumesResponseLiveData.postValue(it)
+
+            }, {
+                AppLogger.e("NetworkError", it.code.toString())
+                AppLogger.e(
+                    "NetworkError",
+                    it.parseAs<ErrorResponse>()?.error?.message.orEmpty()
+                )
+            })
+
+    }
+```
+
+
+```kotlin
+
+   /*
+    *
+    *   you can use Isync inside your Application class, service or work manager
+    *   simply implement the Isync interface
+    *   you need to provide the CompositeDisposable
+    *   and calling disposeIsync() when your componenet's onDestroy() is called
+    *
+    */
+
+@AndroidEntryPoint
+class FirebaseMsgService : FirebaseMessagingService(), Isync{
+    @Inject
+    lateinit var authRepo: AuthRepo
+
+    override val disposable = CompositeDisposable()
+
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        makeNetworkRequest(authRepo.updateNotificationToken(token), {
+          }, {
+          })
+
+    }
+
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposeIsync()
+    }
+
+}
+
+}
+
+```
+
 
 Copyright 2020 Abanoub Milad Nassief Hanna - abanoubcs@gmail.com
 

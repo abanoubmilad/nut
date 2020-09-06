@@ -18,11 +18,6 @@ import io.reactivex.disposables.CompositeDisposable
  *
  */
 open class BaseViewModel : ViewModel(), ISync, IObserve {
-    companion object {
-        var appNetworkFailureCallBack: (() -> Unit)? = null
-    }
-
-    override var networkFailureCallBack = appNetworkFailureCallBack
 
     override val disposable = CompositeDisposable()
 

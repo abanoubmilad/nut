@@ -3,7 +3,9 @@ package org.abanoubmilad.nut.viewmodels
 import androidx.lifecycle.MutableLiveData
 import org.abanoubmilad.nut.AppLogger
 import org.abanoubmilad.nut.BaseViewModel
+import org.abanoubmilad.nut.models.ErrorResponse
 import org.abanoubmilad.nut.models.VolumesResponse
+import org.abanoubmilad.nut.parseAs
 import org.abanoubmilad.nut.repositories.BookRepository
 
 class BookSearchViewModel : BaseViewModel() {
@@ -22,6 +24,10 @@ class BookSearchViewModel : BaseViewModel() {
 
         }, {
             AppLogger.e("NetworkError", it.code.toString())
+            AppLogger.e(
+                "NetworkError",
+                it.parseAs<ErrorResponse>()?.error?.message.orEmpty()
+            )
         })
     }
 
@@ -44,6 +50,10 @@ class BookSearchViewModel : BaseViewModel() {
 
             }, {
                 AppLogger.e("NetworkError", it.code.toString())
+                AppLogger.e(
+                    "NetworkError",
+                    it.parseAs<ErrorResponse>()?.error?.message.orEmpty()
+                )
             })
 
     }

@@ -1,7 +1,6 @@
 package org.abanoubmilad.nut.models
 
 import com.google.gson.annotations.SerializedName
-import org.abanoubmilad.nut.ISyncStatus
 
 
 /*
@@ -12,25 +11,25 @@ import org.abanoubmilad.nut.ISyncStatus
  *
  */
 
-open class NetworkResponseStatus : ISyncStatus {
-    @SerializedName("error")
-    var error: ErrorBody? = null
-    override var message
-        get() = error?.message
-        set(value) {
-            error?.message = value
-        }
-    override var code
-        get() = error?.code ?: 0
-        set(value) {
-            error?.code = value
-        }
-}
 
-class ErrorBody {
-    @SerializedName("error")
-    var message: String? = null
+data class Error(
 
-    @SerializedName("code")
-    var code = 0
-}
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("errors") val errors: List<Errors>
+)
+
+data class Errors(
+
+    @SerializedName("message") val message: String,
+    @SerializedName("domain") val domain: String,
+    @SerializedName("reason") val reason: String,
+    @SerializedName("location") val location: String,
+    @SerializedName("locationType") val locationType: String
+)
+
+
+data class ErrorResponse(
+
+    @SerializedName("error") val error: Error
+)

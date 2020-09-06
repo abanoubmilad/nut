@@ -24,10 +24,9 @@ interface ISync {
 
     val disposable: CompositeDisposable
 
-    var networkFailureCallBack: (() -> Unit)?
+    fun onNetworkFailure() {}
 
     fun disposeISync() {
-        networkFailureCallBack = null
         disposable.dispose()
     }
 
@@ -124,7 +123,7 @@ interface ISync {
         firstCall: Single<Response<R>>,
         secondCall: (R?) -> Single<Response<T>>,
         onSuccess: (T?) -> Unit,
-        onFailure: (ISyncStatus) -> Unit,
+        onFailure: (ISyncFailure) -> Unit,
         finally: (() -> Unit)? = null
     ) {
 
@@ -159,31 +158,30 @@ interface ISync {
 
     private fun handleNetworkFailure(
         response: Throwable,
-        onFailure: (ISyncStatus) -> Unit
+        onFailure: (ISyncFailure) -> Unit
     ) {
         AppLogger.e(TAG, response.toString())
 
         onFailure(
-            ISyncStatus.build(
-                message = response.localizedMessage,
+            ISyncFailure.build(
                 code = 0
             )
         )
-        networkFailureCallBack?.invoke()
+        onNetworkFailure()
     }
 
     private fun <R> handleNetworkResponse(
         response: Response<R>,
         onSuccess: (R?) -> Unit,
-        onFailure: (ISyncStatus) -> Unit
+        onFailure: (ISyncFailure) -> Unit
     ) {
         if (response.isSuccessful) {
             onSuccess(response.body())
         } else {
             AppLogger.e(TAG, response.errorBody()?.charStream().toString())
             onFailure(
-                ISyncStatus.build(
-                    message = (response.body() as? ISyncStatus)?.message,
+                ISyncFailure.build(
+                    errorBody = response.errorBody()?.charStream(),
                     code = response.code()
                 )
             )
@@ -193,7 +191,7 @@ interface ISync {
     fun <R> makeNetworkRequest(
         call: Single<Response<R>>,
         onSuccess: (R?) -> Unit,
-        onFailure: (ISyncStatus) -> Unit,
+        onFailure: (ISyncFailure) -> Unit,
         finally: (() -> Unit)? = null
     ) {
         make(call,
@@ -211,7 +209,7 @@ interface ISync {
         firstOnSuccess: (R?) -> Unit,
         secondCall: Single<Response<T>>,
         secondOnSuccess: (T?) -> Unit,
-        onFailure: (ISyncStatus) -> Unit,
+        onFailure: (ISyncFailure) -> Unit,
         finally: (() -> Unit)? = null
     ) {
 
@@ -238,7 +236,7 @@ interface ISync {
         secondOnSuccess: (T?) -> Unit,
         thirdCall: Single<Response<T>>,
         thirdOnSuccess: (T?) -> Unit,
-        onFailure: (ISyncStatus) -> Unit,
+        onFailure: (ISyncFailure) -> Unit,
         finally: (() -> Unit)? = null
     ) {
 
