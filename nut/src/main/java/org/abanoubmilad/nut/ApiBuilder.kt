@@ -17,13 +17,13 @@ import java.util.concurrent.TimeUnit
  *
  */
 class ApiBuilder(
-    private val debug: Boolean = false,
+    private val enableDebug: Boolean = false,
     private val debugLevel: HttpLoggingInterceptor.Level = HttpLoggingInterceptor.Level.BODY,
     private val headers: HashMap<String, String> = hashMapOf(),
     private val connectTimeout: Int = 30,
     private val readTimeout: Int = 30,
     private val writeTimeout: Int = 30,
-    private val serlizeNulls: Boolean = false
+    private val serializeNulls: Boolean = false
 ) {
 
     /**
@@ -48,8 +48,8 @@ class ApiBuilder(
         OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .apply {
-                if (debug)
-                    addInterceptor(HttpLoggingInterceptor().setLevel(debugLevel))
+                if (enableDebug)
+                    addInterceptor(HttpLoggingInterceptor().apply { level = debugLevel })
             }
             .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
             .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
@@ -65,7 +65,7 @@ class ApiBuilder(
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .apply {
-                if (serlizeNulls)
+                if (serializeNulls)
                     addConverterFactory(
                         GsonConverterFactory.create(
                             GsonBuilder().serializeNulls().create()

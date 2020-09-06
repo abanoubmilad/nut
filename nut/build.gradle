@@ -35,6 +35,16 @@ android {
         enabled = true
     }
 
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
 }
 
 dependencies {
@@ -45,13 +55,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     // Retrofit and OkHttp
-    implementation "com.squareup.retrofit2:retrofit:2.6.0"
-    implementation "com.squareup.okhttp3:okhttp:3.14.0"
+    implementation "com.squareup.retrofit2:retrofit:2.7.0"
+    implementation "com.squareup.okhttp3:okhttp:4.2.1"
 
     // Http Logging Interceptor (Shows log per request)
-    implementation "com.squareup.okhttp3:logging-interceptor:3.14.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.2.1"
 
-    implementation "com.squareup.retrofit2:converter-gson:2.6.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.7.0"
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'

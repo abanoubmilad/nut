@@ -1,7 +1,5 @@
 package org.abanoubmilad.nut
 
-import com.google.gson.annotations.SerializedName
-
 
 /*
  * *
@@ -23,11 +21,4 @@ interface ISyncStatus {
             }
         }
     }
-}
-
-open class NetworkResponseStatus : ISyncStatus {
-    @SerializedName("message")
-    override var message: String? = null
-    @SerializedName("code")
-    override var code = 0
 }
