@@ -91,16 +91,39 @@ class BookSearchViewModel : BaseViewModel {
         author: String?
     ) {
 
+
         makeNetworkRequestsParallel(
             bookRepository.searchVolumes(keyword, author), {
                 volumesResponseLiveData.postValue(it)
 
+            }, {
+
+                AppLogger.e("NetworkError", "first request" + it.code.toString())
+                AppLogger.e(
+                    "NetworkError",
+                    it.parseAs<ErrorResponse>()?.error?.message.orEmpty()
+                )
+
             }, bookRepository.searchVolumes(keyword, author), {
                 volumesResponseLiveData.postValue(it)
+
+            }, {
+                AppLogger.e("NetworkError", "second request" + it.code.toString())
+                AppLogger.e(
+                    "NetworkError",
+                    it.parseAs<ErrorResponse>()?.error?.message.orEmpty()
+                )
 
             },
             bookRepository.searchVolumes(keyword, author), {
                 volumesResponseLiveData.postValue(it)
+
+            }, {
+                AppLogger.e("NetworkError", "third request" + it.code.toString())
+                AppLogger.e(
+                    "NetworkError",
+                    it.parseAs<ErrorResponse>()?.error?.message.orEmpty()
+                )
 
             }, {
                 AppLogger.e("NetworkError", it.code.toString())
@@ -109,6 +132,7 @@ class BookSearchViewModel : BaseViewModel {
                     it.parseAs<ErrorResponse>()?.error?.message.orEmpty()
                 )
             })
+
 
     }
 ```
