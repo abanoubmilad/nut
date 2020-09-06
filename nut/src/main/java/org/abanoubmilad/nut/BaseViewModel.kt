@@ -2,7 +2,7 @@ package org.abanoubmilad.nut
 
 import android.view.View
 import androidx.annotation.CallSuper
-import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
@@ -31,7 +31,7 @@ open class BaseViewModel : ViewModel(), ISync, IObserve {
     }
 
     private val _message =
-        SingleLiveEvent<@IdRes Int>()
+        SingleLiveEvent<@StringRes Int>()
     val message: LiveData<Int> = _message
 
     private val _loading =
@@ -50,7 +50,7 @@ open class BaseViewModel : ViewModel(), ISync, IObserve {
         _loading.postValue(false)
     }
 
-    fun fireMessage(@IdRes msg: Int) {
+    fun fireMessage(@StringRes msg: Int) {
         _message.postValue(msg)
     }
 

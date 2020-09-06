@@ -1,6 +1,6 @@
 package org.abanoubmilad.nut
 
-import android.os.Build
+import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -22,19 +22,9 @@ class ApiBuilder(
     private val headers: HashMap<String, String> = hashMapOf(),
     private val connectTimeout: Int = 30,
     private val readTimeout: Int = 30,
-    private val writeTimeout: Int = 30
+    private val writeTimeout: Int = 30,
+    private val serlizeNulls: Boolean = false
 ) {
-
-    companion object {
-        fun generateCommonHeaders(appVersion: String): HashMap<String, String> {
-            return hashMapOf(
-                "Accept" to "application/json",
-                "User-Agent" to "android",
-                "app-version" to appVersion,
-                "os-version" to Build.VERSION.RELEASE
-            )
-        }
-    }
 
     /**
      * Network interceptor
@@ -74,7 +64,17 @@ class ApiBuilder(
     fun createRXRetrofit(baseUrl: String): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
+            .apply {
+                if (serlizeNulls)
+                    addConverterFactory(
+                        GsonConverterFactory.create(
+                            GsonBuilder().serializeNulls().create()
+                        )
+                    )
+                else
+                    addConverterFactory(GsonConverterFactory.create())
+
+            }
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(client)
             .build()

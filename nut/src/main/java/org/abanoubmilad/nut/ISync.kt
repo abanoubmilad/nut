@@ -5,6 +5,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 
@@ -75,6 +76,41 @@ interface ISync {
                 .subscribe({
                     firstOnSuccess.invoke(it.first)
                     secondOnSuccess.invoke(it.second)
+                    finally?.invoke()
+                }, {
+                    onFailure.invoke(it)
+                    finally?.invoke()
+                })
+        )
+
+    }
+
+    fun <R, T, V> makeParallel(
+        firstCall: Single<R>,
+        firstOnSuccess: (R) -> Unit,
+        secondCall: Single<T>,
+        secondOnSuccess: (T) -> Unit,
+        thirdCall: Single<V>,
+        thirdOnSuccess: (V) -> Unit,
+        onFailure: (Throwable) -> Unit,
+        finally: (() -> Unit)? = null
+    ) {
+
+        disposable.add(
+            Observable
+                .zip(
+                    firstCall.toObservable().subscribeOn(Schedulers.io()),
+                    secondCall.toObservable().subscribeOn(Schedulers.io()),
+                    thirdCall.toObservable().subscribeOn(Schedulers.io()),
+                    Function3<R, T, V, Triple<R, T, V>> { firstResponse, SecondResponse, thirdResponse ->
+                        // here we get the results at a time.
+                        return@Function3 Triple(firstResponse, SecondResponse, thirdResponse)
+                    })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    firstOnSuccess.invoke(it.first)
+                    secondOnSuccess.invoke(it.second)
+                    thirdOnSuccess.invoke(it.third)
                     finally?.invoke()
                 }, {
                     onFailure.invoke(it)
@@ -186,6 +222,37 @@ interface ISync {
             secondCall,
             {
                 handleNetworkResponse(it, secondOnSuccess, onFailure)
+            }, {
+                handleNetworkFailure(it, onFailure)
+            }
+            , finally
+        )
+
+
+    }
+
+    fun <R, T> makeNetworkRequestsParallel(
+        firstCall: Single<Response<R>>,
+        firstOnSuccess: (R?) -> Unit,
+        secondCall: Single<Response<T>>,
+        secondOnSuccess: (T?) -> Unit,
+        thirdCall: Single<Response<T>>,
+        thirdOnSuccess: (T?) -> Unit,
+        onFailure: (ISyncStatus) -> Unit,
+        finally: (() -> Unit)? = null
+    ) {
+
+        makeParallel(firstCall,
+            {
+                handleNetworkResponse(it, firstOnSuccess, onFailure)
+            },
+            secondCall,
+            {
+                handleNetworkResponse(it, secondOnSuccess, onFailure)
+            },
+            thirdCall,
+            {
+                handleNetworkResponse(it, thirdOnSuccess, onFailure)
             }, {
                 handleNetworkFailure(it, onFailure)
             }
