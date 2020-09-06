@@ -37,7 +37,7 @@ Add to app level `build.gradle`
 ```Groovy
     dependencies {
 
-        implementation 'com.github.abanoubmilad:nut:0.1'
+        implementation 'com.github.abanoubmilad:nut:0.3'
         
     }
 ```

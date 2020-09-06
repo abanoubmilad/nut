@@ -207,19 +207,21 @@ interface ISync {
     fun <R, T> makeNetworkRequestsParallel(
         firstCall: Single<Response<R>>,
         firstOnSuccess: (R?) -> Unit,
+        firstOnFailure: (ISyncFailure) -> Unit,
         secondCall: Single<Response<T>>,
         secondOnSuccess: (T?) -> Unit,
+        secondOnFailure: (ISyncFailure) -> Unit,
         onFailure: (ISyncFailure) -> Unit,
         finally: (() -> Unit)? = null
     ) {
 
         makeParallel(firstCall,
             {
-                handleNetworkResponse(it, firstOnSuccess, onFailure)
+                handleNetworkResponse(it, firstOnSuccess, firstOnFailure)
             },
             secondCall,
             {
-                handleNetworkResponse(it, secondOnSuccess, onFailure)
+                handleNetworkResponse(it, secondOnSuccess, secondOnFailure)
             }, {
                 handleNetworkFailure(it, onFailure)
             }
@@ -232,25 +234,28 @@ interface ISync {
     fun <R, T> makeNetworkRequestsParallel(
         firstCall: Single<Response<R>>,
         firstOnSuccess: (R?) -> Unit,
+        firstOnFailure: (ISyncFailure) -> Unit,
         secondCall: Single<Response<T>>,
         secondOnSuccess: (T?) -> Unit,
+        secondOnFailure: (ISyncFailure) -> Unit,
         thirdCall: Single<Response<T>>,
         thirdOnSuccess: (T?) -> Unit,
+        thirdOnFailure: (ISyncFailure) -> Unit,
         onFailure: (ISyncFailure) -> Unit,
         finally: (() -> Unit)? = null
     ) {
 
         makeParallel(firstCall,
             {
-                handleNetworkResponse(it, firstOnSuccess, onFailure)
+                handleNetworkResponse(it, firstOnSuccess, firstOnFailure)
             },
             secondCall,
             {
-                handleNetworkResponse(it, secondOnSuccess, onFailure)
+                handleNetworkResponse(it, secondOnSuccess, secondOnFailure)
             },
             thirdCall,
             {
-                handleNetworkResponse(it, thirdOnSuccess, onFailure)
+                handleNetworkResponse(it, thirdOnSuccess, thirdOnFailure)
             }, {
                 handleNetworkFailure(it, onFailure)
             }
