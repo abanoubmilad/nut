@@ -1,22 +1,25 @@
-<p align="center">
-  <img src="readme_res/nut.jpg" width="400">
-<p style="font-size: 10px;font-style: italic;">Nut (Ancient Egyptian: Nwt), also known by various other transcriptions,
-is the goddess of the sky, stars, cosmos, mothers, astronomy, and the universe in the ancient Egyptian religion.
-She was seen as a star-covered woman arching over the Earth.
-</p>
-</p>
+Nut
+=======
+A clean quick to use RXJava, Retrofit and View model
 
-<h1 align="center">
-Nut <br/>
-A clean quick to use RXJava, Retrofit and View model</h2>
-
-MIT License
-
-Copyright (c) 2020 Abanoub Milad Nassief Hanna\
+MIT License - Copyright (c) 2020 Abanoub Milad Nassief Hanna\
 abanoubcs@gmail.com\
 [@Linkedin](https://www.linkedin.com/in/abanoubmilad/)\
 [@Github](https://github.com/abanoubmilad)
 
+
+
+<p align="center">
+  <img src="readme_res/nut.jpg" width="350">
+</p>
+
+*Nut (Ancient Egyptian: Nwt), also known by various other transcriptions,
+is the goddess of the sky, stars, cosmos, mothers, astronomy, and the universe in the ancient Egyptian religion.
+She was seen as a star-covered woman arching over the Earth.*
+
+
+Features
+========
 
 - implemented in MVVM
 - supports RxJava
@@ -27,7 +30,8 @@ abanoubcs@gmail.com\
 - available on jitpack
 - easy to integrate and extend
 
-## How to add
+How to add
+==========
 
 Add to project level `build.gradle`
 
@@ -52,7 +56,8 @@ Add to app level `build.gradle`
     }
 ```
 
-## How to use
+How to use
+==========
 
 ```kotlin
 
