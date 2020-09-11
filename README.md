@@ -1,6 +1,6 @@
 <p align="center">
   <img src="readme_res/nut.jpg" width="400">
-<p style="font-size: 10px">Nut (Ancient Egyptian: Nwt), also known by various other transcriptions,
+<p style="font-size: 10px;font-style: italic;">Nut (Ancient Egyptian: Nwt), also known by various other transcriptions,
 is the goddess of the sky, stars, cosmos, mothers, astronomy, and the universe in the ancient Egyptian religion.
 She was seen as a star-covered woman arching over the Earth.
 </p>
