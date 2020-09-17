@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
  *  * Last modified 5/1/20 11:05 PM
  *
  */
-class ApiBuilder(
+open class ApiBuilder(
     private val enableDebug: Boolean = false,
     private val debugLevel: HttpLoggingInterceptor.Level = HttpLoggingInterceptor.Level.BODY,
     private val headers: HashMap<String, String> = hashMapOf(),
