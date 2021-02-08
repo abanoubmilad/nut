@@ -58,6 +58,16 @@ dependencies {
     kapt "android.arch.lifecycle:common-java8:1.1.1"
     kapt "com.android.databinding:compiler:3.2.0-alpha10"
 
-    implementation project(':nut')
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
+
+
+
+    //RxJava
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
+    //RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+    api project(':nut')
 
 }
