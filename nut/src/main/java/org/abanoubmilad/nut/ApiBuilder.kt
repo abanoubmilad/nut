@@ -23,7 +23,9 @@ open class ApiBuilder(
     private val connectTimeout: Int = 30,
     private val readTimeout: Int = 30,
     private val writeTimeout: Int = 30,
-    private val serializeNulls: Boolean = false
+    private val serializeNulls: Boolean = false,
+    private val interceptorsToAdd: List<Interceptor>? = null,
+    private val networkInterceptorsToAdd: List<Interceptor>? = null
 ) {
 
     /**
@@ -48,6 +50,15 @@ open class ApiBuilder(
         OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .apply {
+
+                interceptorsToAdd?.forEach {
+                    addInterceptor(it)
+                }
+
+                networkInterceptorsToAdd?.forEach {
+                    addNetworkInterceptor(it)
+                }
+
                 if (enableDebug)
                     addInterceptor(HttpLoggingInterceptor().apply { level = debugLevel })
             }
