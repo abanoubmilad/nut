@@ -1,6 +1,7 @@
 package org.abanoubmilad.nut
 
 import com.google.gson.GsonBuilder
+import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,7 +26,8 @@ open class ApiBuilder(
     private val writeTimeout: Int = 30,
     private val serializeNulls: Boolean = false,
     private val interceptorsToAdd: List<Interceptor>? = null,
-    private val networkInterceptorsToAdd: List<Interceptor>? = null
+    private val networkInterceptorsToAdd: List<Interceptor>? = null,
+    private val authenticator: Authenticator? = null
 ) {
 
     /**
@@ -50,6 +52,10 @@ open class ApiBuilder(
         OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .apply {
+
+                if (authenticator != null) {
+                    authenticator(authenticator)
+                }
 
                 interceptorsToAdd?.forEach {
                     addInterceptor(it)
